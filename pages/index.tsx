@@ -1,4 +1,4 @@
-import { Container, Slider, Typography } from "@mui/material";
+import { Box, Container, Slider, Typography } from "@mui/material";
 import { Html, OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { MathJax } from "better-react-mathjax";
@@ -161,7 +161,25 @@ const IndexPage = () => {
 
   return (
     <Container maxWidth="lg">
-      <Typography align="center" variant="h6" sx={{ pt: 4 }}>
+      <Box
+        sx={{
+          display: "flex",
+
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Box
+          src={"/victorsejas.png"}
+          component="img"
+          alt={"Victor Sejas Logo"}
+          sx={{ maxWidth: "48px", aspectRatio: 1 }}
+        />
+        <Typography variant="h5">
+          <strong>Victor Sejas</strong>
+        </Typography>
+      </Box>
+      <Typography align="center" variant="h6">
         Temporal Evolution of a Complex Variable Function
       </Typography>
       <Typography align="center">
@@ -190,13 +208,15 @@ const IndexPage = () => {
           step={0.01}
           valueLabelDisplay="auto"
           valueLabelFormat={(v) => (
-            <MathJax inline>{`\\( t=${v.toFixed(2)}T  \\)`}</MathJax>
+            <MathJax inline key={`t=${v.toFixed(2)}T`}>
+              {`\\( t=${v.toFixed(2)}T  \\)`}
+            </MathJax>
           )}
           color="info"
         />
       </Container>
-      <Typography align="center" sx={{ pt: 4 }}>
-        <MathJax inline>
+      <Typography align="center">
+        <MathJax inline key={`f(t) = ${rPart.toFixed(2)}+${iPart.toFixed(2)}i`}>
           {`\\( f(t) = ${rPart.toFixed(2)}+${iPart.toFixed(2)}i  \\)`}
         </MathJax>
       </Typography>
