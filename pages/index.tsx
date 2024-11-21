@@ -1,13 +1,18 @@
-import { Container, Slider } from "@mui/material";
+import { Container, Slider, Typography } from "@mui/material";
 import { Html, OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { FC, useState } from "react";
+import { MathJax } from "better-react-mathjax";
+import { FC, useEffect, useState } from "react";
 import * as THREE from "three";
 import { imaginaryPart, realPart } from "../src/components/functions/functions";
 import CurvePlotter2D from "../src/components/plots/CurvePlotter2D";
 
-const CubeView: FC<{ limit: number }> = ({ limit }) => {
-  const numPoints = 200;
+const CubeView: FC<{
+  limit: number;
+  setRPart: (x: number) => void;
+  setIPart: (x: number) => void;
+}> = ({ limit, setRPart, setIPart }) => {
+  const numPoints = 150;
   const minPoint = 0;
   const maxPoint = 5;
 
@@ -76,6 +81,11 @@ const CubeView: FC<{ limit: number }> = ({ limit }) => {
     false
   );
 
+  useEffect(() => {
+    setIPart(imaginaryPart(limit));
+    setRPart(realPart(limit));
+  }, [limit]);
+
   return (
     <group>
       {/* Left Face */}
@@ -89,6 +99,9 @@ const CubeView: FC<{ limit: number }> = ({ limit }) => {
               height={height}
               min={minPoint}
               max={maxPoint}
+              label={
+                "\\( \\mathrm{Im} , f = e^{-\\gamma (t - t_0)^2} sin(\\omega_t) \\)"
+              }
             />
           </div>
         </Html>
@@ -120,6 +133,10 @@ const CubeView: FC<{ limit: number }> = ({ limit }) => {
               height={height}
               min={minPoint}
               max={maxPoint}
+              label={
+                "\\( \\mathrm{Re } f = e^{-\\gamma (t - t_0)^2} cos(\\omega t) \\)"
+              }
+              labelPosition="bottom"
             />
           </div>
         </Html>
@@ -139,28 +156,50 @@ const CubeView: FC<{ limit: number }> = ({ limit }) => {
 
 const IndexPage = () => {
   const [limit, setLimit] = useState(0);
+  const [rPart, setRPart] = useState(0);
+  const [iPart, setIPart] = useState(0);
 
   return (
     <Container maxWidth="lg">
-      <Slider
-        onChange={(e, v) => setLimit(v as number)}
-        min={0}
-        max={5}
-        step={0.01}
-      />
-
+      <Typography align="center" variant="h6" sx={{ pt: 4 }}>
+        Temporal Evolution of a Complex Variable Function
+      </Typography>
+      <Typography align="center">
+        <MathJax>{`\\( f : \\mathbb{R} \\to \\mathbb{C} \\)`}</MathJax>
+      </Typography>
+      <Typography align="center" sx={{ pt: 2, pb: 0 }}>
+        <MathJax>{`\\( \\boxed{f(t) = e^{i \\omega t} e^{-\\gamma (t - t_0)^2}} \\)`}</MathJax>
+      </Typography>
       <Canvas
         camera={{
           position: [10, 10, 10],
           fov: 50,
           rotation: [Math.PI / 4, Math.PI / 4, 0],
         }}
-        style={{ height: "80vh" }}
+        style={{ height: "70vh" }}
       >
         <directionalLight position={[5, 5, 5]} />
-        <CubeView limit={limit} />
+        <CubeView limit={limit} setIPart={setIPart} setRPart={setRPart} />
         <OrbitControls />
       </Canvas>
+      <Container maxWidth="xs" sx={{ pt: 4 }}>
+        <Slider
+          onChange={(e, v) => setLimit(v as number)}
+          min={0}
+          max={5}
+          step={0.01}
+          valueLabelDisplay="auto"
+          valueLabelFormat={(v) => (
+            <MathJax inline>{`\\( t=${v.toFixed(2)}T  \\)`}</MathJax>
+          )}
+          color="info"
+        />
+      </Container>
+      <Typography align="center" sx={{ pt: 4 }}>
+        <MathJax inline>
+          {`\\( f(t) = ${rPart.toFixed(2)}+${iPart.toFixed(2)}i  \\)`}
+        </MathJax>
+      </Typography>
     </Container>
   );
 };

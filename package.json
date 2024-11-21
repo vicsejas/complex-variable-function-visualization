@@ -21,6 +21,7 @@
     "@react-three/drei": "^9.117.3",
     "@react-three/fiber": "^8.17.10",
     "@types/three": "^0.170.0",
+    "better-react-mathjax": "2.0.3",
     "clsx": "latest",
     "next": "latest",
     "react": "latest",
