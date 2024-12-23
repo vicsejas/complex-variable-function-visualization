@@ -1,4 +1,4 @@
-import { Box, Container, Slider, Typography } from "@mui/material";
+import { Box, Container, Link, Slider, Typography } from "@mui/material";
 import { Html, OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { MathJax } from "better-react-mathjax";
@@ -179,6 +179,9 @@ const IndexPage = () => {
           <strong>Victor Sejas</strong>
         </Typography>
       </Box>
+      <center>
+        <Link href="https://victorsejas.com">Link to my personal site.</Link>
+      </center>
       <Typography align="center" variant="h6">
         Temporal Evolution of a Complex Variable Function
       </Typography>
